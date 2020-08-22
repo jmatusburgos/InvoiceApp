@@ -1,0 +1,77 @@
+﻿@model IEnumerable<InvoicingApp.ViewModels.InvoiceViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Facturas</h3>
+
+<input type="button" class="btn btn-primary" style="margin-top:15px;"
+       onclick="location.href='@Url.Action("Create", "Invoice")'" value="Nuevo" />
+
+<div class="panel panel-default" style="margin-top:10px;">
+    
+
+    @*Receive All Database Data From Controller And Display Those Data In Client Side*@
+
+    @if (Model.Count() != 0)
+    {
+        foreach (var item in Model)
+        {
+            <div class="panel-body">
+                <table class="table table-striped table-responsive">
+                    <tbody>
+                        <tr>
+                            <td>Cliente : @item.CustomerName </td>
+                            <td>Factura : @item.Code </td>
+                            <td>SubTotal : @item.SubTotal</td>
+                            <td>Total : @item.Total</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Producto</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th>SubTotal</th>
+                                            <th>Tax</th>
+                                            <th>Total</th>
+                                        </tr>
+                                        @{
+                                            var totalBill = 0;
+                                        }
+                                        @foreach (var order in item.InvoiceDetails)
+                                        {
+                                    <tr>
+                                        <td>@order.ProductCode</td>
+                                        <td>@order.ProductName</td>
+                                        <td>@order.Price</td>
+                                        <td>@order.Quantity</td>
+                                        <td>@order.SubTotal</td>
+                                        <td>@order.Tax</td>
+                                        <td>@order.Total</td>
+                                    </tr>
+                                            totalBill = totalBill + @Convert.ToInt32(order.Total);
+                                        }
+                                    </tbody>
+                                </table>
+                                <span class="pull-right" style="margin-right:100px;"><strong>Total Bill :  </strong> @totalBill</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="panel-body">
+            <h3>No se encontraron registros</h3>
+        </div>
+
+    }
+</div>
+
